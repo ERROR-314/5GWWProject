@@ -1,0 +1,64 @@
+#! /usr/bin/env python3
+# Import ROS.
+import rospy
+# Import the API.
+from iq_gnc.py_gnc_functions import *
+# To print colours (optional).
+from iq_gnc.PrintColours import *
+from pygeodesy.geoids import GeoidPGM
+
+_egm96 = GeoidPGM('/usr/share/GeographicLib/geoids/egm96-5.pgm', kind=-3)
+
+def geoid_height(lat, lon):
+    return _egm96.height(lat, lon)
+
+def main():
+    # Initializing ROS node.
+    rospy.init_node("drone_controller", anonymous=True)
+
+    # Create an object for the API.
+    drone = gnc_api()
+    # Wait for FCU connection.
+    drone.wait4connect()
+    # Wait for the mode to be switched.
+    drone.wait4start()
+
+    # Create local reference frame.
+    drone.initialize_local_frame()
+
+    #drone.start_stream()
+
+    # Request takeoff with an altitude of 3m
+    drone.takeoff(2)
+
+    rate = rospy.Rate(1)
+
+    i = 0
+
+    while i < 10:
+        
+        drone.print_global_coords()
+        rate.sleep()
+        height = geoid_height(drone.global_position.latitude, drone.global_position.longitude)
+        rospy.loginfo(height)
+        rate.sleep()
+
+        drone.set_global_destination(drone.global_position.latitude, drone.global_position.longitude, drone.global_position.altitude + 5 - height)
+        rospy.sleep(10)
+        i+=1
+        rospy.loginfo(i)
+
+    rospy.loginfo(CRED +"WHILE LOOP EXITED. CHANGING WAYPOINTS" +CEND)
+    drone.set_global_destination(drone.global_position.latitude +5, drone.global_position.longitude+5, drone.global_position.altitude + 5 - height)
+    rospy.sleep(10)
+    rospy.loginfo(CRED + "10 seconds passed. Landing NOW!" + CEND)
+    drone.land()
+    # Land after all waypoints is reached.
+    rospy.loginfo(CGREEN2 + "All waypoints reached." + CEND)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        exit()
