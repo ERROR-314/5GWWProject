@@ -11,7 +11,6 @@ from mavros_msgs.srv import CommandBool, CommandBoolRequest
 from mavros_msgs.srv import SetMode, SetModeRequest
 from sensor_msgs.msg import NavSatFix
 from geographic_msgs.msg import GeoPoseStamped, GeoPose, GeoPoint
-from pygeodesy.geoids import GeoidPGM
 
 """Control Functions
 	This module is designed to make high level control programming simple.
@@ -29,7 +28,6 @@ class gnc_api:
         self.waypoint_g = PoseStamped()
         self.global_position = NavSatFix()
         self.waypoint_global = GeoPoseStamped()
-        self.egm96 = GeoidPGM('/usr/share/GeographicLib/geoids/egm96-5.pgm', kind=-3)
 
         self.current_heading_g = 0.0
         self.local_offset_g = 0.0
@@ -346,19 +344,6 @@ class gnc_api:
         self.waypoint_g.pose.position = Point(x, y, z)
 
         self.local_pos_pub.publish(self.waypoint_g)
-
-    def geoid_height(lat, lon):
-        """Calculates AMSL to ellipsoid conversion offset.
-         Uses EGM96 data with 5' grid and cubic interpolation.
-         The value returned can help you convert from meters 
-         above mean sea level (AMSL) to meters above
-         the WGS84 ellipsoid.
-  
-        If you want to go from AMSL to ellipsoid height, add the value.
- 
-         To go from ellipsoid height to AMSL, subtract this value.
-         """
-        return self.egm96.height(lat, lon)
 
     def set_global_destination(self, lat, lon, alt):
 
