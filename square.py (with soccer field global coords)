@@ -47,7 +47,7 @@ def main():
         lat=goals[i][0]
         lon=goals[i][1]
 
-        height = geoid_height(lat, lon)
+        height_correction = geoid_height(lat, lon)
 
         alt=goals[i][2] + altitude - height_correction
 
