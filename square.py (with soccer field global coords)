@@ -51,7 +51,7 @@ def main():
 
         alt=goals[i][2] + altitude - height_correction
 
-        rospy.loginfo(CYELLOW2 + "Current waypoints Lat: {} Long: {} Alt: {} Psi: {}".format(lat,lon,alt) + CEND)
+        rospy.loginfo(CYELLOW2 + "Current waypoints Lat: {} Long: {} Alt: {}".format(lat,lon,alt) + CEND)
 
         drone.set_global_destination(lat,lon,alt)
 
