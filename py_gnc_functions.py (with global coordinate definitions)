@@ -353,12 +353,12 @@ class gnc_api:
          The value returned can help you convert from meters 
          above mean sea level (AMSL) to meters above
          the WGS84 ellipsoid.
-   
-         If you want to go from AMSL to ellipsoid height, add the value.
+  
+        If you want to go from AMSL to ellipsoid height, add the value.
  
          To go from ellipsoid height to AMSL, subtract this value.
          """
-         return self.egm96.height(lat, lon)
+        return self.egm96.height(lat, lon)
 
     def set_global_destination(self, lat, lon, alt):
 
@@ -604,17 +604,20 @@ class gnc_api:
                 1 (int): Waypoint reached successfully.
                 0 (int): Failed to reach Waypoint.
         """
-        pos_tol=0.3
+        pos_tol=0.4
         head_tol=0.15
 
+        cur_pose=Point()
+        cur_pose=self.enu_2_local()
+
         dx = abs(
-            x - self.current_pose_g.pose.pose.position.x
+            x - cur_pose.x
         )
         dy = abs(
-            y - self.current_pose_g.pose.pose.position.y
+            y - cur_pose.y
         )
         dz = abs(
-            z - self.current_pose_g.pose.pose.position.z
+            z - cur_pose.z
         )
 
         dMag = sqrt(pow(dx, 2) + pow(dy, 2) + pow(dz, 2))
