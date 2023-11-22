@@ -56,6 +56,7 @@ def main():
         drone.set_global_destination(lat,lon,alt)
 
         rospy.sleep(10)
+        i+=1
 
     drone.land()
     # Land after all waypoints is reached.
