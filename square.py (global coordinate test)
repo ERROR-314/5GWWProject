@@ -49,7 +49,7 @@ def main():
         rospy.loginfo(i)
 
     rospy.loginfo(CRED +"WHILE LOOP EXITED. CHANGING WAYPOINTS" +CEND)
-    drone.set_global_destination(drone.global_position.latitude +.0005, drone.global_position.longitude+.0005, drone.global_position.altitude + 5 - height)
+    drone.set_global_destination(drone.global_position.latitude +.00005, drone.global_position.longitude+.00005, drone.global_position.altitude - height)
     rospy.sleep(10)
     rospy.loginfo(CRED + "10 seconds passed. Landing NOW!" + CEND)
     drone.land()
