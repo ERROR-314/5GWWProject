@@ -35,7 +35,7 @@ def main():
 
     i = 0
 
-    while i < 10:
+    while i < 5:
         
         drone.print_global_coords()
         rate.sleep()
@@ -43,8 +43,8 @@ def main():
         rospy.loginfo(height)
         rate.sleep()
 
-        drone.set_global_destination(drone.global_position.latitude, drone.global_position.longitude, drone.global_position.altitude + 5 - height)
-        rospy.sleep(10)
+        drone.set_global_destination(drone.global_position.latitude, drone.global_position.longitude, drone.global_position.altitude + 1 - height)
+        rospy.sleep(5)
         i+=1
         rospy.loginfo(i)
 
